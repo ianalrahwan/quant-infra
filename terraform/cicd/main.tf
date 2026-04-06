@@ -177,6 +177,13 @@ resource "aws_iam_role_policy" "deploy_backend" {
   })
 }
 
+# GitHub Actions Secrets
+resource "github_actions_secret" "deploy_role_arn" {
+  repository      = "quant-agent-backend"
+  secret_name     = "DEPLOY_ROLE_ARN"
+  plaintext_value = aws_iam_role.deploy_backend.arn
+}
+
 # Branch Protection (all 3 repos)
 resource "github_branch_protection" "main" {
   for_each = toset(var.repos)
@@ -190,10 +197,10 @@ resource "github_branch_protection" "main" {
   }
 
   require_signed_commits = true
-  enforce_admins         = true
+  enforce_admins         = false
   allows_force_pushes    = false
   allows_deletions       = false
-  require_linear_history = true
+  required_linear_history = true
 
   required_status_checks {
     strict = true
