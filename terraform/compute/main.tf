@@ -41,6 +41,8 @@ locals {
   alb_sg_id          = data.terraform_remote_state.network.outputs.alb_security_group_id
   ecs_sg_id          = data.terraform_remote_state.network.outputs.ecs_security_group_id
   rds_endpoint       = data.terraform_remote_state.data.outputs.rds_endpoint
+  rds_address        = data.terraform_remote_state.data.outputs.rds_address
+  rds_port           = data.terraform_remote_state.data.outputs.rds_port
   rds_db_name        = data.terraform_remote_state.data.outputs.rds_db_name
   redis_endpoint     = data.terraform_remote_state.data.outputs.redis_endpoint
   redis_port         = data.terraform_remote_state.data.outputs.redis_port
@@ -175,8 +177,20 @@ resource "aws_ecs_task_definition" "api" {
 
     environment = [
       {
-        name  = "DATABASE_URL"
-        value = "postgresql+asyncpg://quantagent:PLACEHOLDER@${local.rds_endpoint}/${local.rds_db_name}"
+        name  = "DB_HOST"
+        value = local.rds_address
+      },
+      {
+        name  = "DB_PORT"
+        value = tostring(local.rds_port)
+      },
+      {
+        name  = "DB_NAME"
+        value = local.rds_db_name
+      },
+      {
+        name  = "DB_USER"
+        value = "quantagent"
       },
       {
         name  = "REDIS_URL"
@@ -185,6 +199,10 @@ resource "aws_ecs_task_definition" "api" {
     ]
 
     secrets = [
+      {
+        name      = "DB_PASSWORD"
+        valueFrom = "${local.rds_secret_arn}:password::"
+      },
       {
         name      = "ANTHROPIC_API_KEY"
         valueFrom = local.anthropic_arn
