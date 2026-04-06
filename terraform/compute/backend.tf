@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket         = "PLACEHOLDER_BUCKET"
+    bucket         = "quant-infra-tfstate-126000553768"
     key            = "compute/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "quant-infra-tflock"
