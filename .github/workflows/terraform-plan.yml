@@ -12,6 +12,10 @@ permissions:
 env:
   AWS_REGION: us-east-1
   TF_VERSION: "1.7.0"
+  TF_VAR_state_bucket: ${{ secrets.TF_VAR_state_bucket }}
+  TF_VAR_github_token: ${{ secrets.TF_VAR_github_token }}
+  TF_VAR_vercel_api_token: ${{ secrets.TF_VAR_vercel_api_token }}
+  TF_VAR_vercel_project_id: ${{ secrets.TF_VAR_vercel_project_id }}
 
 jobs:
   plan:
