@@ -197,7 +197,7 @@ resource "github_branch_protection" "main" {
   }
 
   require_signed_commits = true
-  enforce_admins         = true
+  enforce_admins         = false
   allows_force_pushes    = false
   allows_deletions       = false
   required_linear_history = true
