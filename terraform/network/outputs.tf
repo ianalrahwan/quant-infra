@@ -1,27 +1,34 @@
 output "vpc_id" {
-  value = aws_vpc.main.id
+  value     = aws_vpc.main.id
+  sensitive = true
 }
 
 output "public_subnet_ids" {
-  value = aws_subnet.public[*].id
+  value     = aws_subnet.public[*].id
+  sensitive = true
 }
 
 output "private_subnet_ids" {
-  value = aws_subnet.private[*].id
+  value     = aws_subnet.private[*].id
+  sensitive = true
 }
 
 output "alb_security_group_id" {
-  value = aws_security_group.alb.id
+  value     = aws_security_group.alb.id
+  sensitive = true
 }
 
 output "ecs_security_group_id" {
-  value = aws_security_group.ecs.id
+  value     = aws_security_group.ecs.id
+  sensitive = true
 }
 
 output "rds_security_group_id" {
-  value = aws_security_group.rds.id
+  value     = aws_security_group.rds.id
+  sensitive = true
 }
 
 output "redis_security_group_id" {
-  value = aws_security_group.redis.id
+  value     = aws_security_group.redis.id
+  sensitive = true
 }
