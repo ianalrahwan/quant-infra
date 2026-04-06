@@ -43,12 +43,6 @@ resource "aws_db_subnet_group" "main" {
 resource "aws_db_parameter_group" "pgvector" {
   name   = "${var.project_name}-pg16-pgvector"
   family = "postgres16"
-
-  parameter {
-    name         = "shared_preload_libraries"
-    value        = "vector"
-    apply_method = "pending-reboot"
-  }
 }
 
 resource "random_password" "db_password" {
