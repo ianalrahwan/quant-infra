@@ -42,3 +42,20 @@ output "voyage_api_key_secret_arn" {
   value     = aws_secretsmanager_secret.voyage_api_key.arn
   sensitive = true
 }
+
+output "gemini_api_key_secret_arn" {
+  value     = aws_secretsmanager_secret.gemini_api_key.arn
+  sensitive = true
+}
+output "agent_access_password_secret_arn" {
+  value     = aws_secretsmanager_secret.agent_access_password.arn
+  sensitive = true
+}
+output "session_cookie_secret_secret_arn" {
+  value     = aws_secretsmanager_secret.session_cookie_secret.arn
+  sensitive = true
+}
+output "pro_tier_token_secret_arn" {
+  value     = aws_secretsmanager_secret.pro_tier_token.arn
+  sensitive = true
+}

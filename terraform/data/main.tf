@@ -123,3 +123,48 @@ resource "aws_secretsmanager_secret_version" "voyage_api_key" {
   secret_id     = aws_secretsmanager_secret.voyage_api_key.id
   secret_string = "REPLACE_ME"
 }
+
+resource "random_password" "agent_access_password" {
+  length  = 24
+  special = false
+}
+resource "random_password" "session_cookie_secret" {
+  length  = 64
+  special = false
+}
+resource "random_password" "pro_tier_token" {
+  length  = 48
+  special = false
+}
+
+resource "aws_secretsmanager_secret" "gemini_api_key" {
+  name = "${var.project_name}-gemini-api-key"
+}
+resource "aws_secretsmanager_secret_version" "gemini_api_key" {
+  secret_id     = aws_secretsmanager_secret.gemini_api_key.id
+  secret_string = "REPLACE_ME"
+}
+
+resource "aws_secretsmanager_secret" "agent_access_password" {
+  name = "${var.project_name}-agent-access-password"
+}
+resource "aws_secretsmanager_secret_version" "agent_access_password" {
+  secret_id     = aws_secretsmanager_secret.agent_access_password.id
+  secret_string = random_password.agent_access_password.result
+}
+
+resource "aws_secretsmanager_secret" "session_cookie_secret" {
+  name = "${var.project_name}-session-cookie-secret"
+}
+resource "aws_secretsmanager_secret_version" "session_cookie_secret" {
+  secret_id     = aws_secretsmanager_secret.session_cookie_secret.id
+  secret_string = random_password.session_cookie_secret.result
+}
+
+resource "aws_secretsmanager_secret" "pro_tier_token" {
+  name = "${var.project_name}-pro-tier-token"
+}
+resource "aws_secretsmanager_secret_version" "pro_tier_token" {
+  secret_id     = aws_secretsmanager_secret.pro_tier_token.id
+  secret_string = random_password.pro_tier_token.result
+}
