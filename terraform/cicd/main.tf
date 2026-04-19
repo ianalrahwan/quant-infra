@@ -89,6 +89,22 @@ resource "aws_iam_role_policy" "terraform_plan_state" {
   })
 }
 
+# ReadOnlyAccess excludes secretsmanager:GetSecretValue. Grant it explicitly
+# (scoped to project secrets) so terraform plan can refresh secret_version state.
+resource "aws_iam_role_policy" "terraform_plan_secrets_read" {
+  name = "secrets-value-read"
+  role = aws_iam_role.terraform_plan.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["secretsmanager:GetSecretValue"]
+      Resource = "arn:aws:secretsmanager:${var.aws_region}:${local.account_id}:secret:${var.project_name}*"
+    }]
+  })
+}
+
 # IAM Role: Terraform Apply (full access)
 resource "aws_iam_role" "terraform_apply" {
   name = "${var.project_name}-github-tf-apply"
