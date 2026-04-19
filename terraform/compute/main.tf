@@ -49,6 +49,8 @@ locals {
   rds_secret_arn     = data.terraform_remote_state.data.outputs.rds_credentials_secret_arn
   anthropic_arn      = data.terraform_remote_state.data.outputs.anthropic_api_key_secret_arn
   voyage_arn         = data.terraform_remote_state.data.outputs.voyage_api_key_secret_arn
+  gemini_arn         = data.terraform_remote_state.data.outputs.gemini_api_key_secret_arn
+  pro_tier_token_arn = data.terraform_remote_state.data.outputs.pro_tier_token_secret_arn
 }
 
 # ECR
@@ -141,7 +143,13 @@ resource "aws_iam_role_policy" "ecs_execution_secrets" {
     Statement = [{
       Effect   = "Allow"
       Action   = ["secretsmanager:GetSecretValue"]
-      Resource = [local.rds_secret_arn, local.anthropic_arn, local.voyage_arn]
+      Resource = [
+        local.rds_secret_arn,
+        local.anthropic_arn,
+        local.voyage_arn,
+        local.gemini_arn,
+        local.pro_tier_token_arn,
+      ]
     }]
   })
 }
@@ -206,6 +214,14 @@ resource "aws_ecs_task_definition" "api" {
       {
         name      = "ANTHROPIC_API_KEY"
         valueFrom = local.anthropic_arn
+      },
+      {
+        name      = "GEMINI_API_KEY"
+        valueFrom = local.gemini_arn
+      },
+      {
+        name      = "PRO_TIER_TOKEN"
+        valueFrom = local.pro_tier_token_arn
       },
     ]
 
